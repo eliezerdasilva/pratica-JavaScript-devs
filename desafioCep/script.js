@@ -59,3 +59,10 @@ function pesquisacep(valor) {
         limpa_formulário_cep();
     }
 }
+function mascara() {
+    var inputIBGE = document.getElementById('cep');
+    var ibge = inputIBGE.value;
+    ibge = ibge.replace(/\D/g, ''); // Remove caracteres não numéricos
+    ibge = ibge.substring(0, 5) + '-' + ibge.substring(5, 8); // Adiciona o hífen
+    inputIBGE.value = ibge;
+  }
