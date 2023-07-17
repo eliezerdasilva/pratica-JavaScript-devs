@@ -16,12 +16,12 @@ function getCountryInfo() {
       console.log(country);
 
       var name = country.name.common;
-      var capital = country.capital?.[0] || "N/A";
-      var population = country.population?.toLocaleString() || "N/A";
-      var urlbandeira = country.flags?.png || "";
-      var moeda = country.currencies?.[Object.keys(country.currencies)[0]]?.name || "N/A";
-      var languages = Object.values(country.languages || {}).join(", ") || "N/A";
-      var continente = country.region?.region || "N/A";
+      var capital = country.capital?.[0] ;
+      var population = country.population?.toLocaleString() ;
+      var urlbandeira = country.flags?.png;
+      var moeda = country.currencies?.[Object.keys(country.currencies)[0]]?.name ;
+      var languages = Object.values(country.languages || {}).join(", ") ;
+      var continente = country.region ;
 
       document.getElementById("country-name").textContent = name;
       document.getElementById("country-capital").textContent = "Capital: " + capital;
