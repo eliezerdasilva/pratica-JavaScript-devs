@@ -1,0 +1,25 @@
+{
+    "produtos": [
+      {
+        "descricao": "Coxinha",
+        "valor": 5.99
+      },
+      {
+        "descricao": "Empada",
+        "valor": 4.99
+      },
+      {
+        "descricao": "Pastel",
+        "valor": 3.49
+      },
+      {
+        "descricao": "Bolinho de carne",
+        "valor": 6.99
+      },
+      {
+        "descricao": "Coca-cola",
+        "valor": 2.99
+      }
+    ]
+  }
+  
