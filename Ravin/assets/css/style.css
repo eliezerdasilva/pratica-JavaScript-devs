@@ -9,6 +9,13 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
+.inactive{
+  display: none !important;
+}
+.active{
+  display: flex;
+}
+
 body {
   font-family: "Poppins", sans-serif;
   color: #444444;
