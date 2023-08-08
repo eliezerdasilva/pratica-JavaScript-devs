@@ -1,23 +1,63 @@
 {
     "produtos": [
-      {
+      { 
+        "id":"1",
+        "tipo": "lanche",
         "descricao": "Coxinha",
         "valor": 5.99
       },
       {
+        "id":"2",
+        "tipo": "lanche",
         "descricao": "Empada",
         "valor": 4.99
       },
       {
+        "id":"3",
+        "tipo": "lanche",
         "descricao": "Pastel",
         "valor": 3.49
       },
       {
+        "id":"4",
+        "tipo": "lanche",
         "descricao": "Bolinho de carne",
         "valor": 6.99
       },
       {
+        "id":"5",
+        "tipo": "Refrigerante",
+        "descricao": "Laranjinha",
+        "valor": 2.99
+      },
+      {
+        "id":"6",
+        "tipo": "Refrigerante",
         "descricao": "Coca-cola",
+        "valor": 2.99
+      },
+      {
+        "id":"7",
+        "tipo": "Refrigerante",
+        "descricao": "Pepsi",
+        "valor": 2.99
+      },
+      {
+        "id":"8",
+        "tipo": "Porcao",
+        "descricao": "Batata frita",
+        "valor": 2.99
+      },
+      {
+        "id":"9",
+        "tipo": "sobremesas",
+        "descricao": "Banofe",
+        "valor": 2.99
+      },
+      {
+        "id":"10",
+        "tipo": "choop",
+        "descricao": "Itaipava",
         "valor": 2.99
       }
     ]

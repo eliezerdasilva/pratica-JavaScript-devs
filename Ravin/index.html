@@ -111,15 +111,15 @@
         <div class="row">
           <div class="col-lg-12 d-flex justify-content-center">
             <ul id="menu-flters">
-              <li class="menu-itens" data-filter="*" class="filter-active" onclick="filtrarItensMenu(this,'Coxinha')">
+              <li class="menu-itens" data-filter="*" class="filter-active" onclick="filtrarItensMenu(this,'choop')">
                 Choops</li>
-              <li class="menu-itens" data-filter=".filter-salads" onclick="filtrarItensMenu(this,'Empada')">Lanches
+              <li class="menu-itens" data-filter=".filter-salads" onclick="filtrarItensMenu(this,'lanche')">Lanches
               </li>
               <li class="menu-itens" data-filter=".filter-specialty" onclick="filtrarItensMenu(this,'sobremesas')">
                 Sobremesa</li>
-              <li class="menu-itens" data-filter=".filter-specialty" onclick="filtrarItensMenu(this,'bebida')">Bedida
+              <li class="menu-itens" data-filter=".filter-specialty" onclick="filtrarItensMenu(this,'Refrigerante')">Refrigerante
               </li>
-              <li class="menu-itens" data-filter=".filter-specialty" onclick="filtrarItensMenu(this,'porcao')">Porção
+              <li class="menu-itens" data-filter=".filter-specialty" onclick="filtrarItensMenu(this,'Porcao')">Porção
               </li>
             </ul>
           </div>
@@ -203,57 +203,61 @@
           const descricao = produto.descricao;
           const valor = produto.valor;
           const produtoDiv = document.createElement("div");
-          produtoDiv.className = "a";
+          produtoDiv.id = "a" + produto.id;
           produtoDiv.style.padding = "10px"; // Definindo o padding de 10px
           produtoDiv.style.backgroundColor = "#fff"; // Definindo a cor de fundo
           produtoDiv.style.color = "#000"; // Definindo a cor do texto
           produtoDiv.style.flex = "0 0 48%"; // Definindo a largura usando flex
           produtoDiv.style.margin = "1%"; // Definindo a margem
           produtoDiv.style.border = "1px solid black"; // Definindo a margem
+          produtoDiv.setAttribute("data-category", produto.tipo);
           produtoDiv.innerHTML = `
-          <div class="itens-menu"  data-category="${produto.descricao}">
+          <div class="itens-menu">
             <p>Produto: ${descricao}, Valor: R$${valor.toFixed(2)}</p>
             <p><a class="btn" href="#" style="background-color: #888;" onclick="fazerPedido(${JSON.stringify(produto)}, 1)">Fazer pedido</a></p>
         </div>`;
-         
+
           produtosDiv.appendChild(produtoDiv);
         });
       }
 
       async function filtrarItensMenu(elemento, filtro) {
+        const produtosDiv = document.getElementById("main-container");
+
+while (produtosDiv.firstChild) {
+  produtosDiv.removeChild(produtosDiv.firstChild);
+}
+
         const retorno = await procurarArquivo();
         exibirProdutos(retorno);
         removerClasseAtivo(elemento);
 
-        const itensMenu = document.getElementsByClassName("itens-menu");
-        const diva = document.getElementById("a");
-        
+        const idsDosProdutos = retorno.map(function (retorno) {
+          return "a" + retorno.id;
+        });
 
-        for (const itemMenu of itensMenu) {
-
-          const dataCategoryValue = itemMenu.getAttribute("data-category");
-          
-
-          if (itemMenu.getAttribute("data-category") === filtro) {
-            itemMenu.classList.remove("inactive");  
-            itemMenu.style.border = "none"; 
+        for (const id of idsDosProdutos) {
+          const elemento = document.getElementById(id); // Selecionar o elemento pelo ID
+          const dataCategoryValue = elemento.getAttribute("data-category");
+          console.log(dataCategoryValue);
+          elemento.classList.remove("inactive");
+          if (dataCategoryValue === filtro) {
+            elemento.classList.remove("inactive");
           } else {
-            itemMenu.classList.add("inactive");
-          
+            elemento.classList.add("inactive");
+            
+          }
+        }
+
+      }
+        function removerClasseAtivo(elemento) {
+          const elementosAtivos = document.getElementsByClassName("active");
+          for (const elementoAtivo of elementosAtivos) {
+            elementoAtivo.classList.remove("active");
           }
 
+          elemento.parentNode.classList.add("active");
         }
-      }
-
-
-      function removerClasseAtivo(elemento) {
-        const elementosAtivos = document.getElementsByClassName("active");
-        for (const elementoAtivo of elementosAtivos) {
-          elementoAtivo.classList.remove("active");
-        }
-
-        elemento.parentNode.classList.add("active");
-      }
 
       /*
                                                       function montarHtml(itensMenu) {
