@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <style>
+    .active {
+      display: flex;
+    }
+  </style>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Ravin</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,600,600i,700,700i|Satisfy|Comic+Neue:300,300i,400,400i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+  <script src="./script.js"></script>
+</head>
+
+<body>
+
+  <!-- ======= Top Bar ======= -->
+
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top d-flex align-items-center header-transparent">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+      <div class="logo me-auto">
+        <h1><a href="index.html">Ravin</a></h1>
+      </div>
+      <nav id="navbar" class="navbar order-last order-lg-0">
+        <ul>
+          <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+          <li><a class="nav-link scrollto" href="#menu">Menu</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+
+
+
+    </div>
+  </header><!-- End Header -->
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero">
+    <div class="hero-container">
+      <div id="heroCarousel" data-bs-interval="5000" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <ol class="carousel-indicators" id="hero-carousel-indicators"></ol>
+        <div class="carousel-inner" role="listbox">
+          <div class="carousel-item active" style="background-image: url(assets/img/slide/slide-1.jpg);">
+            <div class="carousel-container">
+              <div class="carousel-content">
+                <h2 class="animate__animated animate__fadeInDown"><span>Ravin</span> Restaurante</h2>
+                <div>
+                  <a href="#menu" class="btn-menu animate__animated animate__fadeInUp scrollto">Menu</a>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main id="main">
+
+
+    <div style="width: 100%; text-align: center; padding: 5px; display: inline-block;">
+      <b><span>Mesa </span> <span id="mesa"></span></b>
+      <input type="text" id="nome-mesa" class="add-mesa">
+      <a class="btn add-mesa" href="#" onclick="cadastrarMesa()">Confirmar</a>
+
+      <p><a href="#" onclick="showLastItemOrder()">Mostrar último pedido</a></p>
+      <p>R$<span id="valor-total"></span></p>
+      <button class="btnOK" onclick="refazerPedido()">Refazer Pedido</button>
+      <button class="btnClose" onclick="closeModal()">Fechar Comanda</button>
+    </div>
+    </div>
+
+
+
+
+    <section id="menu" class="menu">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>Menu</h2>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-12 d-flex justify-content-center">
+            <ul id="menu-flters">
+              <li class="menu-itens" data-filter="*" class="filter-active" onclick="filtrarItensMenu(this,'choop')">
+                Choops</li>
+              <li class="menu-itens" data-filter=".filter-salads" onclick="filtrarItensMenu(this,'lanche')">Lanches
+              </li>
+              <li class="menu-itens" data-filter=".filter-specialty" onclick="filtrarItensMenu(this,'sobremesas')">
+                Sobremesa</li>
+              <li class="menu-itens" data-filter=".filter-specialty" onclick="filtrarItensMenu(this,'Refrigerante')">Refrigerante
+              </li>
+              <li class="menu-itens" data-filter=".filter-specialty" onclick="filtrarItensMenu(this,'Porcao')">Porção
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="span9" style="height: 65vh; z-index: 999 !important; overflow: auto;">
+          <div class="row-fluid" id="main-container" style=" display: flex;
+          flex-wrap: wrap; ">
+          </div>
+        </div>
+
+        <div class="row menu-container">
+          <div id="menu-items"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <script>
+
+      verificarNomeMesa();
+
+
+
+
+
+      function loadJSON(callback) {
+        var xobj = new XMLHttpRequest();
+        xobj.overrideMimeType("application/json");
+        xobj.open('GET', 'json.json', true);
+        xobj.onreadystatechange = function () {
+          if (xobj.readyState == 4 && xobj.status == "200") {
+            callback(xobj.responseText);
+          }
+        };
+        xobj.send(null);
+      }
+
+      // Função para exibir os produtos na tela
+      function displayProducts(data) {
+        var menuItems = document.getElementById('menu-items');
+        var products = JSON.parse(data).produtos;
+        var html = '';
+
+        for (var i = 0; i < products.length; i++) {
+          html += '<div>';
+          html += '<div class="menu-content">';
+          html += '<a href="#">' + products[i].descricao + '</a><span>R$ ' + products[i].valor + '</span>';
+          html += '</div>';
+          html += '</div>';
+        }
+
+        menuItems.innerHTML = html;
+      }
+
+
+      async function procurarArquivo() {
+        try {
+          const response = await fetch('json.json');
+          const data = await response.json();
+          return data.produtos;
+        } catch (error) {
+          console.error('Erro ao carregar os produtos:', error);
+          return []; // Return an empty array in case of an error
+        }
+      }
+
+
+      /*
+            function fazerPedido(produto, quantidade) {
+              // Aqui, você pode implementar a lógica para adicionar o produto ao carrinho ou realizar qualquer outra ação relacionada ao pedido.
+              console.log(`Pedido do produto "${produto.descricao}" - Quantidade: ${quantidade}`);
+            }
+      */
+      function exibirProdutos(produtos) {
+
+
+        const produtosDiv = document.getElementById("main-container");
+
+        produtos.forEach((produto) => {
+          const descricao = produto.descricao;
+          const valor = produto.valor;
+          const produtoDiv = document.createElement("div");
+          produtoDiv.id = "a" + produto.id;
+          produtoDiv.style.padding = "10px"; // Definindo o padding de 10px
+          produtoDiv.style.backgroundColor = "#fff"; // Definindo a cor de fundo
+          produtoDiv.style.color = "#000"; // Definindo a cor do texto
+          produtoDiv.style.flex = "0 0 48%"; // Definindo a largura usando flex
+          produtoDiv.style.margin = "1%"; // Definindo a margem
+          produtoDiv.style.border = "1px solid black"; // Definindo a margem
+          produtoDiv.setAttribute("data-category", produto.tipo);
+          produtoDiv.innerHTML = `
+          <div class="itens-menu">
+            <p>Produto: ${descricao}, Valor: R$${valor.toFixed(2)}</p>
+            <p><a class="btn" href="#" style="background-color: #888;" onclick="fazerPedido(${JSON.stringify(produto)}, 1)">Fazer pedido</a></p>
+        </div>`;
+
+          produtosDiv.appendChild(produtoDiv);
+        });
+      }
+
+      async function filtrarItensMenu(elemento, filtro) {
+        const produtosDiv = document.getElementById("main-container");
+
+while (produtosDiv.firstChild) {
+  produtosDiv.removeChild(produtosDiv.firstChild);
+}
+
+        const retorno = await procurarArquivo();
+        exibirProdutos(retorno);
+        removerClasseAtivo(elemento);
+
+        const idsDosProdutos = retorno.map(function (retorno) {
+          return "a" + retorno.id;
+        });
+
+        for (const id of idsDosProdutos) {
+          const elemento = document.getElementById(id); // Selecionar o elemento pelo ID
+          const dataCategoryValue = elemento.getAttribute("data-category");
+          console.log(dataCategoryValue);
+          elemento.classList.remove("inactive");
+          if (dataCategoryValue === filtro) {
+            elemento.classList.remove("inactive");
+          } else {
+            elemento.classList.add("inactive");
+            
+          }
+        }
+
+      }
+        function removerClasseAtivo(elemento) {
+          const elementosAtivos = document.getElementsByClassName("active");
+          for (const elementoAtivo of elementosAtivos) {
+            elementoAtivo.classList.remove("active");
+          }
+
+          elemento.parentNode.classList.add("active");
+        }
+
+      /*
+                                                      function montarHtml(itensMenu) {
+                                                    const divInitial = document.getElementById("main-container");
+                                                    var textHtml = "";
+                                                    console.log(itensMenu)
+                                                
+                                                    for (itemMenu of itensMenu) {
+                                                      const descricao = itemMenu.descricao;
+                                                        const valor = itemMenu.valor;
+                                                      
+                                                      textHtml += `
+                                                          <div class="span12 itens-menu" data-category="${descricao}">
+                                                            <div class="span4 img">
+                                                              <img src="imagens/${itemMenu.imagem}">
+                                                            </div>
+                                                            <div class="span8">
+                                                              <h3>${valor}</h3>
+                                                              <p>${itemMenu.valor}</p>
+                                                              <p><a class="btn" href="#" onclick='fazerPedido(${JSON.stringify(itemMenu)},0)'>Fazer pedido</a></p>
+                                                            </div>
+                                                          </div>
+                                                        `;
+                                                    }
+                                                
+                                                    divInitial.innerHTML = textHtml;
+                                                  }
+                                                
+                                                      // Chamada para carregar o arquivo JSON e exibir os produtos
+                                                      loadJSON(function (response) {
+                                                        montarHtml(response);
+                                                      });
+                                                */
+
+
+    </script>
+
+
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container">
+      <h3>Ravin</h3>
+      <p>----------------</p>
+      <div class="social-links">
+        <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+        <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+        <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+        <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+        <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+      </div>
+      <div class="copyright">
+        <strong><span>Ravin</span></strong>
+      </div>
+      <div class="credits">
+        <a href="https://bootstrapmade.com/">Restaurante</a>
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
